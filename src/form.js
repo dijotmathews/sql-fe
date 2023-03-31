@@ -3,12 +3,17 @@ import ResTable from './table';
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
+import Toast from 'react-bootstrap/Toast';
 
 
 function MyTable() {
   const [data, setData] = useState([{"Result": "None"}]);
   const [text, setText] = useState('');
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState('this');
+  const [showA, setShowA] = useState(false);
+
+    const toggleShowA = () => setShowA(!showA);
+
 //   const [rowsAffected, setRowsAffected] = useState(0)
  
 //   useEffect(() => {
@@ -20,6 +25,7 @@ function MyTable() {
 
   const handleSubmit = event => {
     event.preventDefault();
+	setShowA(false)
     axios.post('http://localhost:9090/v1/api/run', { "query": text })
       .then(response => {
 		let rowsAffected = response.data.rowsAffected;
@@ -34,6 +40,8 @@ function MyTable() {
 				"Command Result" : "No rows returned"
 			}]
 			setData(message)
+			setShowA(true)
+			setErr("No rows affected.")
 		}
 
 
@@ -44,6 +52,7 @@ function MyTable() {
 			let data = error.response.data;
 		
 			setErr(data.message)
+			setShowA(true)
 			console.log(err)
 		
 	  });
@@ -51,6 +60,21 @@ function MyTable() {
 
   return (
     <Container className="p-3">
+		
+	<div>
+				
+      
+        <Toast show={showA} onClose={toggleShowA}>
+          <Toast.Header>
+          
+            <strong className="me-auto">Information</strong>
+            
+          </Toast.Header>
+          <Toast.Body>{ err }</Toast.Body>
+        </Toast>
+   
+	</div>
+		
 	<div>
 		<Form onSubmit={handleSubmit}>
 			<Form.Group controlId="formTextArea">
