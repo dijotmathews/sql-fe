@@ -12,16 +12,7 @@ function MyTable() {
   const [err, setErr] = useState('this');
   const [showA, setShowA] = useState(false);
 
-    const toggleShowA = () => setShowA(!showA);
-
-//   const [rowsAffected, setRowsAffected] = useState(0)
- 
-//   useEffect(() => {
-//     axios.get('https://mocki.io/v1/d4867d8b-b5d5-4a48-a4ab-79131b5809b8')
-//       .then(response => setData(response.data))
-//       .catch(error => console.log(error));
-   
-//   }, []);
+  const toggleShowA = () => setShowA(!showA);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -76,12 +67,13 @@ function MyTable() {
 	</div>
 		
 	<div>
-		<Form onSubmit={handleSubmit}>
-			<Form.Group controlId="formTextArea">
+		<Form onSubmit={handleSubmit} >
+			<Form.Group className="mb-3" controlId="formTextArea">
 			<Form.Label>Enter Query:</Form.Label>
 			<Form.Control as="textarea" rows={3} value={text} onChange={event => setText(event.target.value)} />
 			</Form.Group>
-     		<Button variant="primary" type="submit">Submit</Button>
+     		<Button variant="outline-primary" className="mb-3"  type="submit">Submit</Button>
+     	
     	</Form>
 
 	</div>
