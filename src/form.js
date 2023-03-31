@@ -6,8 +6,10 @@ import Container from 'react-bootstrap/Container';
 
 
 function MyTable() {
-  const [data, setData] = useState([{"batch":1,"id":1,"migration":"2021_09_12_094402_add_landlord_tenants_table"}]);
+  const [data, setData] = useState([{"Result": "None"}]);
   const [text, setText] = useState('');
+  const [err, setErr] = useState('');
+//   const [rowsAffected, setRowsAffected] = useState(0)
  
 //   useEffect(() => {
 //     axios.get('https://mocki.io/v1/d4867d8b-b5d5-4a48-a4ab-79131b5809b8')
@@ -20,14 +22,31 @@ function MyTable() {
     event.preventDefault();
     axios.post('http://localhost:9090/v1/api/run', { "query": text })
       .then(response => {
-		// console.log(response.data)
-		const data = JSON.parse(response.data.message);
-		// columns = Object.keys(data[0]);
-		setData(data)
-		// console.log(columns)
+		let rowsAffected = response.data.rowsAffected;
+
+		if (rowsAffected > 0) {
+			let message = JSON.parse(response.data.message);
+			setData(message)
+		}
+
+		if (rowsAffected === 0) {
+			let message = [{
+				"Command Result" : "No rows returned"
+			}]
+			setData(message)
+		}
+
+
 
 	  })
-      .catch(error => console.log(error));
+      .catch(error => {
+			console.error(error.message)
+			let data = error.response.data;
+		
+			setErr(data.message)
+			console.log(err)
+		
+	  });
   }
 
   return (
