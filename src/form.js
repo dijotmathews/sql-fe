@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ResTable from './table';
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
@@ -17,12 +17,12 @@ function MyTable() {
   const handleSubmit = event => {
     event.preventDefault();
 	setShowA(false)
-    axios.post('http://localhost:9090/v1/api/run', { "query": text })
+    axios.post('http://backend:5000/v1/api/run', { "query": text })
       .then(response => {
-		let rowsAffected = response.data.rowsAffected;
+		let rowsAffected = response.data.data.length;
 
 		if (rowsAffected > 0) {
-			let message = JSON.parse(response.data.message);
+			let message = response.data.data;
 			setData(message)
 		}
 
